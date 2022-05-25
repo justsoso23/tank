@@ -1,28 +1,27 @@
-package com.sxt;
+package giao;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
+import java.awt.*;
 
 public abstract class GameObject {
 
-    //å¨“å‘Šå™éå†ªç¤Œé¥å‰§å¢–
+    //ÓÎÏ·ÔªËØÍ¼Æ¬
     Image img;
-    //å¨“å‘Šå™éå†ªç¤Œé¨å‹¬Ã­é§æ„­çˆ£
+    //ÓÎÏ·ÔªËØµÄºá×ø±ê
     int x;
-    //å¨“å‘Šå™éå†ªç¤Œé¨å‹­æ—±é§æ„­çˆ£
+    //ÓÎÏ·ÔªËØµÄ×İ×ø±ê
     int y;
-    //å¨“å‘Šå™éå†ªç¤Œé¨å‹«î†”
+    //ÓÎÏ·ÔªËØµÄ¿í
     int width;
-    //å¨“å‘Šå™éå†ªç¤Œé¨å‹¯ç®
-   
-    //å¨“å‘Šå™éå†ªç¤Œé¨å‹­Ğ©é”ã„¦æŸŸéšï¿½
-
-    //å¯®æ›å†æ¶“è¤æ™«é—ˆï¿½
+    //ÓÎÏ·ÔªËØµÄ¸ß
+    int height;
+    //ÓÎÏ·ÔªËØµÄÒÆ¶¯ËÙ¶È
+    int speed;
+    //ÓÎÏ·ÔªËØµÄÒÆ¶¯·½Ïò
+    Direction direction;
+    //ÒıÈëÖ÷½çÃæ
     GamePanel gamePanel;
 
-    
+    public GameObject(){}
     public GameObject(String img, int x, int y, GamePanel gamePanel) {
         this.img = Toolkit.getDefaultToolkit().getImage(img);
         this.x = x;
@@ -30,11 +29,72 @@ public abstract class GameObject {
         this.gamePanel = gamePanel;
     }
 
- 
-	public abstract void paintSelft(Graphics g);
-	
-	public abstract Rectangle gerRec();
+    public Image getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = Toolkit.getDefaultToolkit().getImage(img);
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
+    public GamePanel getGamePanel() {
+        return gamePanel;
+    }
+
+    public void setGamePanel(GamePanel gamepanel) {
+        this.gamePanel = gamePanel;
+    }
+
+    //¼Ì³ĞÔªËØ»æÖÆ×Ô¼ºµÄ·½·¨
+    public abstract void paintSelf(Graphics g);
+
+    //»ñÈ¡µ±Ç°ÓÎÏ·ÔªËØµÄ¾ØĞÎ,ÊÇÎªÅö×²¼ì²â¶øĞ´
+    public abstract Rectangle getRec();
 }
-		
-
-

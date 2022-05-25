@@ -1,7 +1,5 @@
-package com.sxt;
+package giao;
 
-public class Direction {
-
-	public static final Direction UP = null;
-
+public enum Direction {
+    UP,LEFT,RIGHT,DOWN
 }
