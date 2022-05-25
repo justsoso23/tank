@@ -1,16 +1,20 @@
 package giao;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GamePanel extends JFrame {
 
-    /** 定义双缓存图片 */
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/** 定义双缓存图片 */
     Image offScreenImage = null;
     //游戏状态 0 游戏未开始， 1 单人模式， 2 双人模式， 3 游戏暂停， 4 游戏失败， 5 游戏胜利
     int state= 0;
@@ -18,19 +22,25 @@ public class GamePanel extends JFrame {
     private boolean start = false;
     //临时变量
     int a = 1;
+    //重绘次数
+    public int count = 0;
     //窗口长宽
     int width = 800;
     int height = 610;
     //物体集合
+    public List<Bullet> bulletList = new ArrayList<>();
     public List<Tank> tankList = new ArrayList<>();
+    public List<Bot> botList = new ArrayList<>();
+    public List<Bullet> removeList = new ArrayList<>();
+    public List<Wall> wallList = new ArrayList<>();
     //游戏指针
-    Image select = Toolkit.getDefaultToolkit().getImage("D:\\\\\\\\BaiduNetdiskDownload\\\\\\\\tank\\\\\\\\tank\\\\\\\\images\\\\\\\\images\\\\\\\\player1\\\\\\\\p1tankU.gif");
+    Image select = Toolkit.getDefaultToolkit().getImage("images/selecttank.gif");
     //指针初始高度
     int y = 150;
     //玩家
-    private PlayerOne playerOne = new PlayerOne("D:\\BaiduNetdiskDownload\\tank\\tank\\images\\images\\player1\\p1tankU.gif", 125, 510,
-            "D:\\BaiduNetdiskDownload\\tank\\tank\\images\\images\\player1/p1tankU.gif","D:\\BaiduNetdiskDownload\\tank\\tank\\images\\images\\player1/p1tankD.gif",
-            "D:\\BaiduNetdiskDownload\\tank\\tank\\images\\images\\player1/p1tankL.gif","D:\\BaiduNetdiskDownload\\tank\\tank\\images\\images\\player1/p1tankR.gif", this);
+    private PlayerOne playerOne = new PlayerOne("images/player1/p1tankU.gif", 125, 510,
+            "images/player1/p1tankU.gif","images/player1/p1tankD.gif",
+            "images/player1/p1tankL.gif","images/player1/p1tankR.gif", this);
 
     //窗口的启动方法
     public void launch(){
@@ -48,8 +58,25 @@ public class GamePanel extends JFrame {
         setVisible(true);
         //添加键盘事件
         this.addKeyListener(new GamePanel.KeyMonitor());
+        //添加围墙
+        for(int i = 0; i< 14; i ++){
+            wallList.add(new Wall("images/walls.gif", i*60 ,170, this ));
+        }
+        wallList.add(new Wall("images/walls.gif", 305 ,560,this ));
+        wallList.add(new Wall("images/walls.gif", 305 ,500,this ));
+        wallList.add(new Wall("images/walls.gif", 365 ,500,this ));
+        wallList.add(new Wall("images/walls.gif", 425 ,500,this ));
+        wallList.add(new Wall("images/walls.gif", 425 ,560,this ));
 
         while (true){
+            if (count % 100 == 1) {
+                Random r = new Random();
+                int rnum =r.nextInt(800);
+                botList.add(new Bot("images/enemy/enemy1U.gif", rnum, 110,
+                        "images/enemy/enemy1U.gif","images/enemy/enemy1D.gif",
+                        "images/enemy/enemy1L.gif","images/enemy/enemy1R.gif", this));
+                //System.out.println("bot: " + botList.size());
+            }
             repaint();
             try {
                 //线程休眠  1秒 = 1000毫秒
@@ -70,11 +97,11 @@ public class GamePanel extends JFrame {
         //获得该图片的画布
         Graphics gImage= offScreenImage.getGraphics();
         //设置背景颜色
-        gImage.setColor(Color.gray);
+        gImage.setColor(Color.black);
         //填充整个画布
         gImage.fillRect(0, 0, width, height);
         //挂变画笔颜色
-        gImage.setColor(Color.BLUE);
+        gImage.setColor(Color.red);
         //改变文字大小和样式
         gImage.setFont(new Font("仿宋",Font.BOLD,50));
         if(state == 0){
@@ -95,7 +122,21 @@ public class GamePanel extends JFrame {
                 gImage.drawString("双人模式",220,200);
             }
             //paint重绘游戏元素
-            playerOne.paintSelf(gImage);
+            for(Tank player: tankList){
+                player.paintSelf(gImage);
+            }
+            for(Bullet bullet: bulletList){
+                bullet.paintSelf(gImage);
+            }
+            bulletList.removeAll(removeList);
+            for(Bot bot: botList){
+                bot.paintSelf(gImage);
+            }
+            for (Wall wall: wallList){
+                wall.paintSelf(gImage);
+            }
+            //重绘次数+1
+            count++;
         }
         /** 将缓冲区绘制好哦的图形整个绘制到容器的画布中 */
         g.drawImage(offScreenImage, 0, 0, null);

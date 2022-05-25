@@ -88,7 +88,7 @@ public abstract class GameObject {
         return gamePanel;
     }
 
-    public void setGamePanel(GamePanel gamepanel) {
+    public void setGamePanel(GamePanel gamepanel, GamePanel gamePanel) {
         this.gamePanel = gamePanel;
     }
 
